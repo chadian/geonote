@@ -16,7 +16,7 @@ App.Note = Ember.Object.extend({
 // Persisting data through localStorage layer
 App.localStorage = Ember.Object.create({
 	init: function() {
-		var storage = (typeof localStorage.notes !== undefined && Array.isArray(JSON.parse(localStorage.notes))) ? JSON.parse(localStorage.notes) : [];
+		var storage = (typeof localStorage.notes === 'string') ? JSON.parse(localStorage.notes) : [];
 		this.set('storage', storage);
   	},
   	saveStorage: function() {
