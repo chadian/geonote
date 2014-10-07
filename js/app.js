@@ -69,6 +69,14 @@ App.IndexRoute = Ember.Route.extend({
 
 App.NoteRoute = Ember.Route.extend({
 	controllerName: 'edit',
+	setupController: function(controller, model) {
+
+		if (model.get('geoLong') && model.get('geoLat')) {
+			controller.set('gpsPolled', true);
+		}
+
+		controller.set('model', model);
+	},
 	renderTemplate: function() {
 	    this.render('editNote', {
 	      into: 'application',
@@ -106,15 +114,20 @@ App.EditController = Ember.ObjectController.extend({
 	// note is specified by the 'model' property, set by router
 	title: '',
 	gpsPolling: false,
+	gpsPolled: true,
 	actions: {
 		pollGPS: function() {
 
+			this.set('gpsPolling', true);
+
 			if ("geolocation" in navigator) {
-				this.set('gpsPolling', true);
+				
 				navigator.geolocation.getCurrentPosition(function(position) {
 					this.set('model.geoLat', position.coords.latitude);
 					this.set('model.geoLong', position.coords.longitude);
 					this.set('gpsPolling', false);
+					this.set('gpsPolled', true);
+					
 				}.bind(this));
 			} else {
 			  /* geolocation IS NOT available */
@@ -123,11 +136,8 @@ App.EditController = Ember.ObjectController.extend({
 			
 		},
 		save: function() {
-			if (this.model.get('noteId')) {
-				App.localStorage.saveNote(this.model);
-			} else {
-				App.localStorage.saveNote(this.model);
-			}
+			App.localStorage.saveNote(this.model);
+			alert('Note saved');
 		}
 	}
 

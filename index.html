@@ -12,6 +12,12 @@
   </script>
 
   <script type="text/x-handlebars" id="index">
+    <header>
+      <h1>GeoNotes</h1>
+      {{#link-to 'add'}}
+        <button class="header-icon new"></button>
+      {{/link-to}}
+    </header>
     <div class="notes">
     {{#each note in model}}
       {{#link-to 'note' note.noteId}}
@@ -24,16 +30,34 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="editNote">
-    
-    {{input valueBinding="model.title"}}
-    {{textarea valueBinding="model.text"}}
-    <button {{action "pollGPS"}}>Add GPS</button>
-    <div id="gps-polling" {{bind-attr class="gpsPolling"}}></div>
-    <div id="geo-coords">
-    <span class="geo-long">{{model.geoLong}}</span>
-    <span id="geo-lat">{{model.geoLat}}</span>
+    <header>
+      {{#link-to 'index'}}
+        <button class="header-icon back"></button>
+      {{/link-to}}
+      <h1>Note</h1>
+      <button class="header-icon save" {{action "save"}}></button>
+    </header>
+    <div class="single-note">
+      <div class="note-title">
+        <label>Title:</label>
+        {{input valueBinding="model.title"}}
+      </div>    
+      <div class="note-text">
+        <label>Note:</label>
+        {{textarea valueBinding="model.text"}}
+      </div>
+      <div class="gps-details">
+        <button {{action "pollGPS"}}>Add GPS Coordinates</button>
+        <div class="spinner" {{bind-attr class="gpsPolling"}}>
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+        <div class="geo-coords" {{bind-attr class="gpsPolled"}}>
+          <div class="geo-coord geo-long">{{model.geoLong}}</div>
+          <div class="geo-coord geo-lat">{{model.geoLat}}</div>
+        </div>
+      </div>
     </div>
-    <button {{action "save"}}>Save</button>
   </script>  
 
   <script src="js/libs/jquery-1.10.2.js"></script>
