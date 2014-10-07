@@ -2,24 +2,39 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ember Starter Kit</title>
+  <title>GeoNote</title>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <script type="text/x-handlebars">
-    <h2>Welcome to Ember.js</h2>
-
     {{outlet}}
   </script>
 
   <script type="text/x-handlebars" id="index">
-    <ul>
-    {{#each item in model}}
-      <li>{{item}}</li>
+    <div class="notes">
+    {{#each note in model}}
+      {{#link-to 'note' note.noteId}}
+        <div class="note">
+          {{note.title}}
+        </div>
+      {{/link-to}}
     {{/each}}
-    </ul>
+    </div>
   </script>
+
+  <script type="text/x-handlebars" data-template-name="editNote">
+    
+    {{input valueBinding="model.title"}}
+    {{textarea valueBinding="model.text"}}
+    <button {{action "pollGPS"}}>Add GPS</button>
+    <div id="gps-polling" {{bind-attr class="gpsPolling"}}></div>
+    <div id="geo-coords">
+    <span class="geo-long">{{model.geoLong}}</span>
+    <span id="geo-lat">{{model.geoLat}}</span>
+    </div>
+    <button {{action "save"}}>Save</button>
+  </script>  
 
   <script src="js/libs/jquery-1.10.2.js"></script>
   <script src="js/libs/handlebars-1.1.2.js"></script>
